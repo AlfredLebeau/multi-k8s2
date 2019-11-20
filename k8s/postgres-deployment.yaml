@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: postgres
+  template:
+    metadata:
+      labels:
+        component: postgres
+    spec:
+      volumes: 
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: ssg-pvc-nfs-a
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /postgres/var/lib/postgresql/data
+              #subPath: postgres
+          env:
+            - name: PGPASSWORD  
+              #PGPASSWORD IS THE ENVIRONMENT VARIABLE NAME
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD  
+                  # this value comes from the secret key/pair... PGPASSWORD=12345asfd
+
