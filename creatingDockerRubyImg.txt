@@ -1,0 +1,14 @@
+#USE PowerShell to run the "unix" commands
+#in Powershell cd to C:\Data\FV-Labs\Docker_and_Kubernetes - udemy\Part 2 -Kubernetes\Lab-3-complexToGCP
+
+docker run -it -v ${pwd}:/app ruby:2.3 sh
+# so now /app will be mapped to "C:\Data\FV-Labs\Docker_and_Kubernetes - udemy\Part 2 -Kubernetes\Lab-3-complexToGCP"
+
+#now type at the # prompt:  
+gem install travis
+travis login 
+travis encrypt-file service-account.json -r AlfredLebeau/multi-k8s2
+# response:
+#Please add the following to your build script (before_install stage in your .travis.yml, for instance):
+#openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d
+
